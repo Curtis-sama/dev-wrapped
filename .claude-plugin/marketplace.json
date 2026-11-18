@@ -3,6 +3,9 @@
   "owner": {
     "name": "Curtis-sama"
   },
+  "metadata": {
+    "description": "Git Wrapped: a self-updating yearly coding card for your GitHub profile."
+  },
   "plugins": [
     {
       "name": "dev-wrapped",
