@@ -1,6 +1,6 @@
 {
   "name": "dev-wrapped",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "🎁 Spotify Wrapped, but for your Git history. Stunning terminal recap + a shareable story in your browser. Zero dependencies.",
   "author": "Curtis-sama",
   "homepage": "https://github.com/Curtis-sama/dev-wrapped#readme",

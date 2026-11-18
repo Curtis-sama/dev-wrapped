@@ -1,0 +1,73 @@
+name: 'Git Wrapped card'
+description: 'Generate an animated "Spotify Wrapped"-style SVG card of your GitHub year for your profile README.'
+author: 'Curtis-sama'
+branding:
+  icon: 'git-commit'
+  color: 'purple'
+
+inputs:
+  github_user:
+    description: 'GitHub username to wrap. Defaults to the owner of the repository running the workflow.'
+    required: false
+    default: ${{ github.repository_owner }}
+  github_token:
+    description: 'Token used to read the GitHub API. The default token only sees public activity; use a personal access token to include private contributions.'
+    required: false
+    default: ${{ github.token }}
+  output:
+    description: 'Path of the SVG file to write.'
+    required: false
+    default: 'dev-wrapped.svg'
+  theme:
+    description: 'auto (follows the viewer light/dark preference), dark or light.'
+    required: false
+    default: 'auto'
+  year:
+    description: 'Year to wrap. Defaults to the current year.'
+    required: false
+    default: ''
+  timezone:
+    description: 'IANA time zone used for commit hours, e.g. Europe/Paris.'
+    required: false
+    default: 'UTC'
+  commit:
+    description: 'Commit and push the generated SVG to the current branch.'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Generate card
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        GW_USER: ${{ inputs.github_user }}
+        GW_OUTPUT: ${{ inputs.output }}
+        GW_THEME: ${{ inputs.theme }}
+        GW_YEAR: ${{ inputs.year }}
+        GW_TZ: ${{ inputs.timezone }}
+      run: |
+        args=(--github "$GW_USER" --svg "$GW_OUTPUT" --theme "$GW_THEME" --tz "$GW_TZ" --no-anim --no-open)
+        if [ -n "$GW_YEAR" ]; then args+=(--year "$GW_YEAR"); fi
+        node "$GITHUB_ACTION_PATH/bin/git-wrapped.js" "${args[@]}"
+
+    - name: Commit card
+      if: ${{ inputs.commit == 'true' }}
+      shell: bash
+      env:
+        GW_OUTPUT: ${{ inputs.output }}
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add -- "$GW_OUTPUT"
+        if git diff --cached --quiet; then
+          echo "Card unchanged, nothing to commit."
+        else
+          git commit -m "Update Git Wrapped card"
+          git push
+        fi

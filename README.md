@@ -35,6 +35,52 @@ Zero dependencies · Works on one repo, all your repos, or a whole GitHub accoun
 
 **3. A 1080×1350 share card**: download the PNG at the end and post it with **#GitWrapped**
 
+## Put it on your GitHub profile
+
+Show an animated card on your profile that updates itself every day. It follows your visitors' light or dark theme.
+
+<img src="assets/card.svg" width="840" alt="Git Wrapped profile card" />
+
+**1.** In your profile repository (the one named like your username), create `.github/workflows/dev-wrapped.yml`:
+
+```yaml
+name: Git Wrapped
+on:
+  schedule:
+    - cron: '0 6 * * *'   # every day at 06:00 UTC
+  workflow_dispatch:       # lets you run it by hand
+permissions:
+  contents: write
+jobs:
+  card:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Curtis-sama/dev-wrapped@v1
+        with:
+          timezone: Europe/Paris   # optional, for accurate coding hours
+```
+
+**2.** Add the card to your profile `README.md`:
+
+```markdown
+![My Git Wrapped](./dev-wrapped.svg)
+```
+
+**3.** Run the workflow once from the **Actions** tab, and you're done.
+
+| Input | Default | Description |
+|---|---|---|
+| `github_user` | repository owner | Account to wrap |
+| `github_token` | `github.token` | Use a personal access token secret to include private contributions |
+| `output` | `dev-wrapped.svg` | Where to write the card |
+| `theme` | `auto` | `auto`, `dark` or `light` |
+| `year` | current year | Year to wrap |
+| `timezone` | `UTC` | Time zone for commit hours |
+| `commit` | `true` | Commit the card to the repository |
+
+You can also generate the card locally: `npx dev-wrapped --svg card.svg`.
+
 ## Your developer personality
 
 Based on *when* and *how* you commit, git-wrapped tells you who you really are:
@@ -98,6 +144,8 @@ npx dev-wrapped --year 2025
 | `--no-open` | Don't open the browser story |
 | `--no-anim` | Disable terminal animations |
 | `-o, --out <file>` | Where to save the HTML story |
+| `--svg <file>` | Write the animated SVG card |
+| `--theme <mode>` | SVG theme: `auto`, `dark` or `light` |
 | `--json` | Output raw stats as JSON (build your own thing!) |
 
 ## GitHub mode

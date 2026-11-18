@@ -1,12 +1,13 @@
 #!/usr/bin/env node
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join, resolve, dirname } from 'node:path';
 import { spawn } from 'node:child_process';
 import { readCommits, findRepos, isRepoDir, repoRoot, gitConfig } from '../src/git.js';
 import { computeStats } from '../src/stats.js';
 import { render, rawLine, style } from '../src/terminal.js';
 import { buildHtml } from '../src/html.js';
+import { buildSvg } from '../src/svg.js';
 import { resolveToken, makeRequest, fetchGitHubYear, GitHubError } from '../src/github.js';
 
 const { DIM, BOLD, RESET } = style;
@@ -38,12 +39,14 @@ const HELP = `
         --no-open          Don't open the story in the browser
         --no-anim          Disable terminal animations
     -o, --out <file>       Where to save the HTML story
+        --svg <file>       Write an animated SVG card (for your GitHub profile README)
+        --theme <mode>     SVG theme: auto (follows the viewer), dark or light
         --json             Print raw stats as JSON
     -h, --help             Show this help
 `;
 
 function parseArgs(argv) {
-  const o = { year: new Date().getFullYear(), scan: null, github: undefined, tz: Intl.DateTimeFormat().resolvedOptions().timeZone, authors: [], everyone: false, open: true, anim: true, out: null, json: false };
+  const o = { year: new Date().getFullYear(), scan: null, github: undefined, tz: Intl.DateTimeFormat().resolvedOptions().timeZone, authors: [], everyone: false, open: true, anim: true, out: null, json: false, svg: null, theme: 'auto' };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     const next = () => {
@@ -61,12 +64,15 @@ function parseArgs(argv) {
     else if (a === '--no-anim') o.anim = false;
     else if (a === '-o' || a === '--out') o.out = next();
     else if (a === '--json') o.json = true;
+    else if (a === '--svg') o.svg = next();
+    else if (a === '--theme') o.theme = next();
     else if (a === '-h' || a === '--help') {
       rawLine(HELP);
       process.exit(0);
     } else fail(`Unknown option: ${a}`);
   }
   if (!Number.isInteger(o.year) || o.year < 1970 || o.year > 3000) fail('Invalid --year');
+  if (!['auto', 'dark', 'light'].includes(o.theme)) fail('Invalid --theme (use auto, dark or light)');
   try {
     new Intl.DateTimeFormat('en-US', { timeZone: o.tz });
   } catch {
@@ -165,6 +171,14 @@ function loadLocal(o) {
 }
 
 async function output(stats, o) {
+  if (o.svg) {
+    const file = resolve(o.svg);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, buildSvg(stats, { theme: o.theme }));
+    rawLine(`  ${BOLD}◆ SVG card written:${RESET} ${file}`);
+    rawLine(`  ${DIM}${stats.commits} commits · ${stats.archetype.name}${RESET}`);
+    return;
+  }
   if (o.json) {
     process.stdout.write(JSON.stringify(stats, null, 2) + '\n');
     return;
