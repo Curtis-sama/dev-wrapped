@@ -5,7 +5,7 @@ Thanks for helping! 🎁
 ## Setup
 
 ```bash
-git clone <your-fork-url> && cd git-wrapped
+git clone <your-fork-url> && cd dev-wrapped
 npm test
 node bin/git-wrapped.js          # run it in any git repo
 ```

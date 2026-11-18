@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "🎁 Spotify Wrapped, but for your Git history. Stunning terminal recap + a shareable story in your browser. Zero dependencies.",
   "author": "Curtis-sama",
-  "homepage": "https://github.com/Curtis-sama/git-wrapped#readme",
+  "homepage": "https://github.com/Curtis-sama/dev-wrapped#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Curtis-sama/git-wrapped.git"
+    "url": "git+https://github.com/Curtis-sama/dev-wrapped.git"
   },
   "bugs": {
-    "url": "https://github.com/Curtis-sama/git-wrapped/issues"
+    "url": "https://github.com/Curtis-sama/dev-wrapped/issues"
   },
   "type": "module",
   "bin": {

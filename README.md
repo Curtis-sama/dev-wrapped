@@ -5,7 +5,7 @@
 [![npm](https://img.shields.io/npm/v/dev-wrapped?color=5e5ce6&label=npm)](https://www.npmjs.com/package/dev-wrapped)
 [![downloads](https://img.shields.io/npm/dm/dev-wrapped?color=bf5af2)](https://www.npmjs.com/package/dev-wrapped)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-30d158)](package.json)
-[![license](https://img.shields.io/github/license/Curtis-sama/git-wrapped?color=64d2ff)](LICENSE)
+[![license](https://img.shields.io/github/license/Curtis-sama/dev-wrapped?color=64d2ff)](LICENSE)
 
 ### Spotify Wrapped, but for your Git history.
 
