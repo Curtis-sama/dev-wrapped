@@ -155,6 +155,7 @@ export async function render(stats, { anim = true } = {}) {
   const { pause, line, type } = makeWriter(anim && out.isTTY);
   const accent = fg(P[2]);
   const hot = fg(P[3]);
+  const MK = `${accent}◆${RESET}`;
 
   line();
   const title = big('GIT WRAPPED');
@@ -187,15 +188,15 @@ export async function render(stats, { anim = true } = {}) {
   if (G) {
     line(heading('Your year on GitHub', P));
     await type(`  ${BOLD}${hot}${fmt(G.contributions)}${RESET} ${DIM}contributions on your profile${RESET}`);
-    await type(`  🔀 ${BOLD}${fmt(G.prs)}${RESET} pull requests   👀 ${BOLD}${fmt(G.reviews)}${RESET} reviews   🐞 ${BOLD}${fmt(G.issues)}${RESET} issues`);
-    if (G.privateContributions) await type(`  🔒 ${BOLD}${fmt(G.privateContributions)}${RESET} ${DIM}private contributions (top secret)${RESET}`);
+    await type(`  ${MK} ${BOLD}${fmt(G.prs)}${RESET} pull requests   ${MK} ${BOLD}${fmt(G.reviews)}${RESET} reviews   ${MK} ${BOLD}${fmt(G.issues)}${RESET} issues`);
+    if (G.privateContributions) await type(`  ${MK} ${BOLD}${fmt(G.privateContributions)}${RESET} ${DIM}private contributions (top secret)${RESET}`);
     if (G.topRepos.length) {
       line();
       const maxR = G.topRepos[0].count;
       for (let i = 0; i < G.topRepos.length; i++) {
         const r = G.topRepos[i];
         const label = r.name.length > 26 ? '…' + r.name.slice(-25) : r.name;
-        line(barRow(label.padEnd(26), r.count, maxR, 18, lerp(P.slice(1), 1 - i / 5), `${DIM}${r.count} commits${r.stars ? ` · ★ ${fmt(r.stars)}` : ''}${RESET}`));
+        line(barRow(label.padEnd(26), r.count, maxR, 18, lerp(P.slice(1), 1 - i / 5), `${DIM}${r.count} commits${r.stars ? ` · ${MK} ${fmt(r.stars)}` : ''}${RESET}`));
         await pause(60);
       }
     }
@@ -210,8 +211,8 @@ export async function render(stats, { anim = true } = {}) {
   }
   line();
   if (stats.longestStreak.length)
-    await type(`  🔥 Longest streak   ${BOLD}${hot}${stats.longestStreak.length} days${RESET} ${DIM}(${stats.longestStreak.from} → ${stats.longestStreak.to})${RESET}`);
-  if (stats.busiest) await type(`  ⚡ Busiest day      ${BOLD}${hot}${stats.busiest.count} commits${RESET} ${DIM}on ${stats.busiest.day}${RESET}`);
+    await type(`  ${MK} Longest streak   ${BOLD}${hot}${stats.longestStreak.length} days${RESET} ${DIM}(${stats.longestStreak.from} → ${stats.longestStreak.to})${RESET}`);
+  if (stats.busiest) await type(`  ${MK} Busiest day      ${BOLD}${hot}${stats.busiest.count} commits${RESET} ${DIM}on ${stats.busiest.day}${RESET}`);
   await pause(700);
 
   // time
@@ -224,10 +225,10 @@ export async function render(stats, { anim = true } = {}) {
     await pause(40);
   }
   line();
-  await type(`  ⏰ Peak hour  ${BOLD}${accent}${pad2(stats.peakHour)}:00${RESET}   📅 Favorite day  ${BOLD}${accent}${stats.peakWeekday}${RESET}`);
+  await type(`  ⏰ Peak hour  ${BOLD}${accent}${pad2(stats.peakHour)}:00${RESET}   ${MK} Favorite day  ${BOLD}${accent}${stats.peakWeekday}${RESET}`);
   if (stats.latest && (stats.latest.hour < 5 || stats.latest.hour >= 23)) {
     await type(
-      `  🌙 Latest commit  ${BOLD}${hot}${pad2(stats.latest.hour)}:${pad2(stats.latest.minute)}${RESET} ${DIM}on ${stats.latest.day} —${RESET} ${ITALIC}"${stats.latest.subject.slice(0, 50)}"${RESET}`
+      `  ${MK} Latest commit  ${BOLD}${hot}${pad2(stats.latest.hour)}:${pad2(stats.latest.minute)}${RESET} ${DIM}on ${stats.latest.day} —${RESET} ${ITALIC}"${stats.latest.subject.slice(0, 50)}"${RESET}`
     );
   }
   await pause(700);
@@ -248,11 +249,11 @@ export async function render(stats, { anim = true } = {}) {
   if (stats.words.length) {
     await type(`  ${DIM}Your favorite words:${RESET} ${stats.words.slice(0, 6).map((w, i) => `${fg(lerp(P.slice(1), 1 - i / 6))}${BOLD}${w.word}${RESET}${DIM}×${w.count}${RESET}`).join('  ')}`);
   }
-  await type(`  🐛 You fixed things ${BOLD}${stats.fixes}${RESET} times${stats.wip ? `  ·  🚧 ${BOLD}${stats.wip}${RESET} WIP commits` : ''}${stats.rage ? `  ·  🤬 ${BOLD}${stats.rage}${RESET} rage commits` : ''}`);
+  await type(`  ${MK} You fixed things ${BOLD}${stats.fixes}${RESET} times${stats.wip ? `  ·  ${MK} ${BOLD}${stats.wip}${RESET} WIP commits` : ''}${stats.rage ? `  ·  ${MK} ${BOLD}${stats.rage}${RESET} rage commits` : ''}`);
   if (stats.shortestMsg && stats.shortestMsg.subject.length <= 4)
-    await type(`  🤐 Most eloquent message: ${ITALIC}${hot}"${stats.shortestMsg.subject}"${RESET}`);
-  if (stats.topFiles[0]) await type(`  📂 Most edited file: ${BOLD}${stats.topFiles[0].name}${RESET} ${DIM}(${stats.topFiles[0].count}×)${RESET}`);
-  if (stats.teammates[0]) await type(`  🤝 Partner in crime: ${BOLD}${stats.teammates[0].name}${RESET} ${DIM}(${stats.teammates[0].count} commits alongside you)${RESET}`);
+    await type(`  ${MK} Most eloquent message: ${ITALIC}${hot}"${stats.shortestMsg.subject}"${RESET}`);
+  if (stats.topFiles[0]) await type(`  ${MK} Most edited file: ${BOLD}${stats.topFiles[0].name}${RESET} ${DIM}(${stats.topFiles[0].count}×)${RESET}`);
+  if (stats.teammates[0]) await type(`  ${MK} Partner in crime: ${BOLD}${stats.teammates[0].name}${RESET} ${DIM}(${stats.teammates[0].count} commits alongside you)${RESET}`);
   await pause(900);
 
   // archetype reveal
@@ -265,8 +266,8 @@ export async function render(stats, { anim = true } = {}) {
     }
     out.write('\r\x1b[2K');
   }
-  const nameRow = `${A.emoji}  ${A.name.toUpperCase()}`;
-  const nameW = 4 + A.name.length; // emoji renders 2 columns wide whatever its code length
+  const nameRow = `◆  ${A.name.toUpperCase()}`;
+  const nameW = 3 + A.name.length;
   const boxW = Math.max(nameW, A.tagline.length, A.description.length) + 6;
   const border = (l, r) => '  ' + gradient(l + '─'.repeat(boxW) + r, P.slice(1));
   const inner = (s, style = '', w = s.length) => `  ${fg(P[1])}│${RESET}   ${style}${s}${RESET}${' '.repeat(Math.max(0, boxW - w - 3))}${fg(P[3])}│${RESET}`;

@@ -12,7 +12,7 @@ import { resolveToken, makeRequest, fetchGitHubYear, GitHubError } from '../src/
 const { DIM, BOLD, RESET } = style;
 
 const HELP = `
-  ${BOLD}git-wrapped${RESET} — Spotify Wrapped, but for your Git history 🎁
+  ${BOLD}git-wrapped${RESET} — Spotify Wrapped, but for your Git history
 
   ${BOLD}Usage${RESET}
     npx git-wrapped [options]
@@ -21,7 +21,7 @@ const HELP = `
     npx git-wrapped                     ${DIM}# this repo${RESET}
     npx git-wrapped --scan ~/code       ${DIM}# every repo on your machine${RESET}
     npx git-wrapped --github            ${DIM}# your whole GitHub account${RESET}
-    npx git-wrapped --github torvalds   ${DIM}# anyone's GitHub year 👀${RESET}
+    npx git-wrapped --github torvalds   ${DIM}# anyone's GitHub year${RESET}
 
   ${BOLD}GitHub mode${RESET} needs a token: it uses ${BOLD}gh auth token${RESET} if you have the GitHub CLI,
   otherwise set ${BOLD}GITHUB_TOKEN${RESET} (create one at https://github.com/settings/tokens,
@@ -77,7 +77,7 @@ function parseArgs(argv) {
 }
 
 function fail(msg) {
-  console.error(`\n  ✖ ${msg}\n`);
+  console.error(`\n  ${msg}\n`);
   process.exit(1);
 }
 
@@ -175,7 +175,7 @@ async function output(stats, o) {
   const file = resolve(o.out || join(tmpdir(), `git-wrapped-${o.year}.html`));
   writeFileSync(file, buildHtml(stats));
   const opened = o.open && process.stdout.isTTY && openFile(file);
-  rawLine(`  ${BOLD}✨ Your animated story${RESET} ${DIM}${opened ? 'is opening in your browser' : 'is ready'}:${RESET}`);
+  rawLine(`  ${BOLD}◆ Your animated story${RESET} ${DIM}${opened ? 'is opening in your browser' : 'is ready'}:${RESET}`);
   rawLine(`     ${DIM}file://${file}${RESET}`);
   rawLine(`  ${DIM}Download your card at the end and share it with${RESET} ${BOLD}#GitWrapped${RESET}\n`);
 }

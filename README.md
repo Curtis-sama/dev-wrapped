@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎁 git-wrapped
+# git-wrapped
 
 ### Spotify Wrapped, but for your Git history.
 
@@ -20,59 +20,59 @@ Zero dependencies · Works on one repo, all your repos, or a whole GitHub accoun
 
 ---
 
-## ✨ What you get
+## What you get
 
 **1. A gorgeous terminal recap**: gradient titles, animated counters, a contribution heatmap, your coding clock…
 
 <img src="assets/terminal.png" width="620" alt="Terminal output" />
 
-**2. An animated story in your browser**: full-screen slides, Instagram-story style, with confetti 🎉
+**2. An animated story in your browser**: full-screen slides, Instagram-story style, with confetti
 
 **3. A 1080×1350 share card**: download the PNG at the end and post it with **#GitWrapped**
 
-## 🔮 Your developer personality
+## Your developer personality
 
 Based on *when* and *how* you commit, git-wrapped tells you who you really are:
 
-| | Personality | You… |
-|---|---|---|
-| 🦉 | **The Night Owl** | commit while the world sleeps |
-| 🌅 | **The Early Bird** | ship before the coffee is ready |
-| ⚔️ | **The Weekend Warrior** | don't know what Saturday is |
-| 🚒 | **The Firefighter** | are the one everybody calls when it's on fire |
-| 🏃 | **The Marathoner** | kept a streak going for weeks |
-| 🧹 | **The Cleaner** | deleted more code than you wrote |
-| 🏗️ | **The Architect** | land whole features in one commit |
-| 🎯 | **The Sniper** | make tiny, surgical commits |
-| 🌪️ | **The Tornado** | had a day with 25+ commits |
-| 💼 | **The Professional** | have achieved work-life balance |
-| 🧑‍💻 | **The Steady Builder** | just kept building |
+| Personality | You… |
+|---|---|
+| **The Night Owl** | commit while the world sleeps |
+| **The Early Bird** | ship before the coffee is ready |
+| **The Weekend Warrior** | don't know what Saturday is |
+| **The Firefighter** | are the one everybody calls when it's on fire |
+| **The Marathoner** | kept a streak going for weeks |
+| **The Cleaner** | deleted more code than you wrote |
+| **The Architect** | land whole features in one commit |
+| **The Sniper** | make tiny, surgical commits |
+| **The Tornado** | had a day with 25+ commits |
+| **The Professional** | have achieved work-life balance |
+| **The Steady Builder** | just kept building |
 
-Which one are you? Run it and find out 👀
+Which one are you? Run it and find out.
 
-## 📊 Stats included
+## Stats included
 
 - Total commits, active days and **estimated hours of coding**
 - Lines added/removed, plus **how many novels that would fill** (*"That's 1.2× Dune"*)
 - Year heatmap, **longest streak** and busiest day
-- Peak hour, favorite weekday and **your latest-night commit** 🌙
+- Peak hour, favorite weekday and **your latest-night commit**
 - Top languages
-- Your favorite commit words, how many times you wrote "fix", **WIP and rage commits** 🤬
+- Your favorite commit words, how many times you wrote "fix", **WIP and rage commits**
 - Your most edited file and your **partner in crime**
 
-## 🚀 Usage
+## Usage
 
 ```bash
 # Wrap the current repository (your commits only)
 npx git-wrapped
 
-# Wrap ALL your projects at once 🤯
+# Wrap ALL your projects at once
 npx git-wrapped --scan ~/code
 
-# Your WHOLE GitHub account, nothing to clone 🚀
+# Your WHOLE GitHub account, nothing to clone
 npx git-wrapped --github
 
-# Anyone's GitHub year 👀
+# Anyone's GitHub year
 npx git-wrapped --github torvalds
 
 # A team recap of the current repo
@@ -95,7 +95,7 @@ npx git-wrapped --year 2025
 | `-o, --out <file>` | Where to save the HTML story |
 | `--json` | Output raw stats as JSON (build your own thing!) |
 
-## 🐙 GitHub mode
+## GitHub mode
 
 `--github` reads a whole account through the GitHub API: commits on every repo (including other people's projects you contributed to), **pull requests, reviews, issues** and your exact profile contribution calendar.
 
@@ -109,17 +109,22 @@ Create the token at [github.com/settings/tokens](https://github.com/settings/tok
 
 > Commit details come from the default branch of the 40 repos you contributed to most.
 
-## 🔒 Privacy
+## Privacy
 
 In local mode, git-wrapped only reads your `git log`: no network calls, no tracking, no account.
 In `--github` mode it talks only to `api.github.com`, with your own token.
 The story is a single HTML file saved on your machine.
 
-## 🤝 Contributing
+## Contributing
 
 New personalities, stats or slides are very welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-If git-wrapped made you smile, **leave a ⭐**. It really helps!
+If git-wrapped made you smile, **leave a star**. It really helps!
+
+## Credits
+
+- Typeface: [Geist and Geist Mono](https://vercel.com/font) by Vercel, under the SIL Open Font License (see `src/fonts/OFL.txt`).
+- Icons: original line icons drawn for this project.
 
 ## License
 

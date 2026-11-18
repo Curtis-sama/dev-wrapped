@@ -3,6 +3,7 @@
 export const ARCHETYPES = [
   {
     id: 'night-owl',
+    icon: 'moon',
     emoji: '🦉',
     name: 'The Night Owl',
     tagline: 'The bugs come out at night. So do you.',
@@ -12,6 +13,7 @@ export const ARCHETYPES = [
   },
   {
     id: 'early-bird',
+    icon: 'sunrise',
     emoji: '🌅',
     name: 'The Early Bird',
     tagline: 'Shipping before the coffee is even ready.',
@@ -21,6 +23,7 @@ export const ARCHETYPES = [
   },
   {
     id: 'weekend-warrior',
+    icon: 'weekend',
     emoji: '⚔️',
     name: 'The Weekend Warrior',
     tagline: 'Saturday? Never heard of her.',
@@ -30,6 +33,7 @@ export const ARCHETYPES = [
   },
   {
     id: 'firefighter',
+    icon: 'flame',
     emoji: '🚒',
     name: 'The Firefighter',
     tagline: 'Something is always on fire. You bring the hose.',
@@ -39,6 +43,7 @@ export const ARCHETYPES = [
   },
   {
     id: 'marathoner',
+    icon: 'trend',
     emoji: '🏃',
     name: 'The Marathoner',
     tagline: 'Consistency is your superpower.',
@@ -48,6 +53,7 @@ export const ARCHETYPES = [
   },
   {
     id: 'cleaner',
+    icon: 'trash',
     emoji: '🧹',
     name: 'The Cleaner',
     tagline: 'The best code is no code.',
@@ -57,6 +63,7 @@ export const ARCHETYPES = [
   },
   {
     id: 'architect',
+    icon: 'cube',
     emoji: '🏗️',
     name: 'The Architect',
     tagline: 'Go big or go home.',
@@ -66,6 +73,7 @@ export const ARCHETYPES = [
   },
   {
     id: 'sniper',
+    icon: 'scope',
     emoji: '🎯',
     name: 'The Sniper',
     tagline: 'Small commits. Surgical precision.',
@@ -75,6 +83,7 @@ export const ARCHETYPES = [
   },
   {
     id: 'tornado',
+    icon: 'tornado',
     emoji: '🌪️',
     name: 'The Tornado',
     tagline: 'When you go, you GO.',
@@ -84,6 +93,7 @@ export const ARCHETYPES = [
   },
   {
     id: 'nine-to-five',
+    icon: 'briefcase',
     emoji: '💼',
     name: 'The Professional',
     tagline: 'Work-life balance: achieved.',
@@ -95,6 +105,7 @@ export const ARCHETYPES = [
 
 export const DEFAULT_ARCHETYPE = {
   id: 'builder',
+    icon: 'stack',
   emoji: '🧑‍💻',
   name: 'The Steady Builder',
   tagline: 'Brick by brick, commit by commit.',
