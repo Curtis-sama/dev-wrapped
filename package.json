@@ -1,0 +1,35 @@
+{
+  "name": "git-wrapped",
+  "version": "1.0.0",
+  "description": "🎁 Spotify Wrapped, but for your Git history. Stunning terminal recap + a shareable story in your browser. Zero dependencies.",
+  "type": "module",
+  "bin": {
+    "git-wrapped": "bin/git-wrapped.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "start": "node bin/git-wrapped.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "git",
+    "wrapped",
+    "year-in-review",
+    "stats",
+    "cli",
+    "terminal",
+    "developer",
+    "commits",
+    "github",
+    "spotify-wrapped"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
