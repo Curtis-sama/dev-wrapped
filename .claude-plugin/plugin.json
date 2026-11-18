@@ -1,0 +1,12 @@
+{
+  "name": "dev-wrapped",
+  "description": "Put a self-updating Git Wrapped card on your GitHub profile.",
+  "version": "1.1.0",
+  "author": {
+    "name": "Curtis-sama"
+  },
+  "homepage": "https://github.com/Curtis-sama/dev-wrapped",
+  "repository": "https://github.com/Curtis-sama/dev-wrapped",
+  "license": "MIT",
+  "keywords": ["github", "profile", "readme", "wrapped", "stats"]
+}

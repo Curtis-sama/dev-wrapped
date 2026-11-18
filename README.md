@@ -41,6 +41,21 @@ Show an animated card on your profile that updates itself every day. It follows 
 
 <img src="assets/card.svg" width="840" alt="Git Wrapped profile card" />
 
+### The 2-minute way: let Claude Code do it
+
+In [Claude Code](https://claude.com/claude-code), with the [GitHub CLI](https://cli.github.com) logged in:
+
+```
+/plugin marketplace add Curtis-sama/dev-wrapped
+/plugin install dev-wrapped@dev-wrapped
+```
+
+Then just ask: **"Put the dev-wrapped card on my GitHub profile"**. It creates your profile repository if needed, adds the workflow and the card, and runs it once.
+
+### By hand
+
+Full beginner-friendly guide: **[docs/PROFILE_SETUP.md](docs/PROFILE_SETUP.md)**. The short version:
+
 **1.** In your profile repository (the one named like your username), create `.github/workflows/dev-wrapped.yml`:
 
 ```yaml
@@ -68,6 +83,8 @@ jobs:
 ```
 
 **3.** Run the workflow once from the **Actions** tab, and you're done.
+
+> Put the image line **above** any `<!--` in your README: GitHub's default profile README hides its content inside an HTML comment.
 
 | Input | Default | Description |
 |---|---|---|

@@ -1,0 +1,13 @@
+{
+  "name": "dev-wrapped",
+  "owner": {
+    "name": "Curtis-sama"
+  },
+  "plugins": [
+    {
+      "name": "dev-wrapped",
+      "source": "./",
+      "description": "Put a self-updating Git Wrapped card on your GitHub profile."
+    }
+  ]
+}
