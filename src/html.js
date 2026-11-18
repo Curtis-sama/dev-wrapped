@@ -2,7 +2,7 @@
 // ending with a downloadable 1080×1350 share card. Fonts are embedded so the
 // page looks identical everywhere, even offline.
 import { readFileSync } from 'node:fs';
-import { ICONS, svgIcon } from './icons.js';
+import { ICONS, STROKE, svgIcon } from './icons.js';
 
 const here = (p) => new URL(p, import.meta.url);
 const read = (p) => readFileSync(here(p));
@@ -44,6 +44,7 @@ ${css.replace(/<\//g, '<\\/')}
 <script>
 const S = ${data};
 const ICONS = ${icons};
+const STROKE = ${JSON.stringify(STROKE)};
 ${app.replace(/<\/script/gi, '<\\/script')}
 </script>
 </body>

@@ -1,6 +1,10 @@
 // Original line icons drawn for git-wrapped, in the spirit of Apple's SF Symbols
 // (24×24 grid, 1.75 stroke, round caps). Pure path data, so they work both as
 // inline SVG and as canvas Path2D for the share card.
+// Stroke style shared by every renderer (inline SVG, canvas, profile card).
+// The path data above only carries geometry; these settings carry the look.
+export const STROKE = { regular: 1.75, bold: 2, cap: 'round', join: 'round' };
+
 const ring = (cx, cy, r) => `M${cx} ${cy - r}a${r} ${r} 0 1 1 0 ${2 * r}a${r} ${r} 0 1 1 0 ${-2 * r}z`;
 
 export const ICONS = {
@@ -44,5 +48,5 @@ export const ICONS = {
 };
 
 export function svgIcon(name, size = 18, extra = '') {
-  return `<svg class="ic" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ${extra}><path d="${ICONS[name]}"/></svg>`;
+  return `<svg class="ic" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${STROKE.regular}" stroke-linecap="${STROKE.cap}" stroke-linejoin="${STROKE.join}" aria-hidden="true" ${extra}><path d="${ICONS[name]}"/></svg>`;
 }

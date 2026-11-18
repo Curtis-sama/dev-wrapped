@@ -1,4 +1,4 @@
-/* global S, ICONS */
+/* global S, ICONS, STROKE */
 const A = S.archetype;
 const G = S.github;
 const $ = (s, el = document) => el.querySelector(s);
@@ -6,7 +6,7 @@ const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&
 const fmt = (n) => Math.round(n).toLocaleString('en-US');
 const pad = (n) => String(n).padStart(2, '0');
 const ic = (name, size = 16) =>
-  `<svg class="ic" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${ICONS[name]}"/></svg>`;
+  `<svg class="ic" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${STROKE.regular}" stroke-linecap="${STROKE.cap}" stroke-linejoin="${STROKE.join}" aria-hidden="true"><path d="${ICONS[name]}"/></svg>`;
 
 // Apple system colors (dark appearance): [glow A, glow B, accent]
 const PAL = {
@@ -285,13 +285,13 @@ function rr(x, X, Y, w, h, r) {
   if (x.roundRect) x.roundRect(X, Y, w, h, r);
   else x.rect(X, Y, w, h);
 }
-function drawIcon(x, name, X, Y, size, color, width = 1.75) {
+function drawIcon(x, name, X, Y, size, color, width = STROKE.regular) {
   x.save();
   x.translate(X, Y);
   x.scale(size / 24, size / 24);
   x.lineWidth = width;
-  x.lineCap = 'round';
-  x.lineJoin = 'round';
+  x.lineCap = STROKE.cap;
+  x.lineJoin = STROKE.join;
   x.strokeStyle = color;
   x.stroke(new Path2D(ICONS[name]));
   x.restore();
@@ -332,7 +332,7 @@ function renderCard() {
   x.textBaseline = 'alphabetic';
 
   // header
-  drawIcon(x, 'commit', 78, 72, 34, '#f5f5f7', 2);
+  drawIcon(x, 'commit', 78, 72, 34, '#f5f5f7', STROKE.bold);
   mono(x, G ? `git wrapped · @${G.login}` : 'git wrapped', 126, 99, 22, 0.7);
   mono(x, String(S.year), W - 80, 99, 22, 0.7, 'right');
 
@@ -361,7 +361,7 @@ function renderCard() {
   rr(x, 112, 482, 136, 136, 32);
   x.fillStyle = tg;
   x.fill();
-  drawIcon(x, A.icon, 136, 506, 88, '#ffffff', 1.9);
+  drawIcon(x, A.icon, 136, 506, 88, '#ffffff', STROKE.bold);
   x.fillStyle = '#f5f5f7';
   x.font = `600 54px ${SANS}`;
   if ('letterSpacing' in x) x.letterSpacing = '-2px';
@@ -386,7 +386,7 @@ function renderCard() {
     x.fill();
     x.strokeStyle = 'rgba(255,255,255,.1)';
     x.stroke();
-    drawIcon(x, icon, cx + 32, cy + 28, 30, acc, 2);
+    drawIcon(x, icon, cx + 32, cy + 28, 30, acc, STROKE.bold);
     x.fillStyle = '#f5f5f7';
     x.font = `600 ${v.length > 10 ? 40 : 52}px ${SANS}`;
     if ('letterSpacing' in x) x.letterSpacing = '-2px';

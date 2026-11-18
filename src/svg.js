@@ -1,7 +1,7 @@
 // Renders a self-contained, animated SVG card for GitHub profile READMEs.
 // It follows the viewer's light/dark preference (theme: 'auto'), or can be forced.
 import { readFileSync } from 'node:fs';
-import { ICONS } from './icons.js';
+import { ICONS, STROKE } from './icons.js';
 
 const W = 840;
 const H = 420;
@@ -11,9 +11,9 @@ const pad = (n) => String(n).padStart(2, '0');
 const xml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[c]);
 const clip = (s, n) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
 
-function icon(name, x, y, size, cls, width = 1.75) {
+function icon(name, x, y, size, cls, width = STROKE.regular) {
   const k = size / 24;
-  return `<path d="${ICONS[name]}" transform="translate(${x} ${y}) scale(${k})" class="${cls}" fill="none" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  return `<path d="${ICONS[name]}" transform="translate(${x} ${y}) scale(${k})" class="${cls}" fill="none" stroke-width="${width}" stroke-linecap="${STROKE.cap}" stroke-linejoin="${STROKE.join}"/>`;
 }
 
 const THEMES = {
@@ -47,7 +47,7 @@ export function buildSvg(stats, { theme = 'auto' } = {}) {
       const y = 72 + Math.floor(i / 2) * 94;
       return `<g class="a" style="animation-delay:${(0.35 + i * 0.1).toFixed(2)}s">
 <rect x="${x}" y="${y}" width="182" height="82" rx="16" class="panel"/>
-${icon(ic, x + 16, y + 14, 16, 'acc-s', 2)}
+${icon(ic, x + 16, y + 14, 16, 'acc-s', STROKE.bold)}
 <text x="${x + 16}" y="${y + 56}" class="sans val">${xml(value)}</text>
 <text x="${x + 16}" y="${y + 72}" class="mono lbl">${xml(label.toUpperCase())}</text>
 </g>`;
@@ -121,7 +121,7 @@ ${themeCss}
 <circle cx="820" cy="430" r="340" fill="url(#g2)" class="glow"/>
 </g>
 <g class="a">
-${icon('commit', 30, 25, 20, 'ink-s', 2)}
+${icon('commit', 30, 25, 20, 'ink-s', STROKE.bold)}
 <text x="58" y="40" class="mono head">GIT WRAPPED · ${stats.year}</text>
 <text x="${W - 32}" y="40" text-anchor="end" class="mono head">${xml(clip(handle, 32))}</text>
 </g>
@@ -132,7 +132,7 @@ ${icon('commit', 30, 25, 20, 'ink-s', 2)}
 <g class="a" style="animation-delay:.25s">
 <rect x="32" y="178" width="376" height="76" rx="16" class="panel"/>
 <rect x="44" y="190" width="52" height="52" rx="13" fill="url(#tile)"/>
-${icon(A.icon, 55, 201, 30, '', 1.9).replace('class=""', 'stroke="#fff"')}
+${icon(A.icon, 55, 201, 30, '', STROKE.bold).replace('class=""', 'stroke="#fff"')}
 <text x="110" y="213" class="sans name">${xml(A.name)}</text>
 <text x="110" y="234" class="sans tag">${xml(clip(A.tagline, 50))}</text>
 </g>
