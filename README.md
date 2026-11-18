@@ -33,7 +33,22 @@ Pick the line that matches what you have. New to all this? Follow the **[beginne
 |---|---|---|
 | **Just a GitHub account** | [Put the card on your GitHub profile](docs/PROFILE_SETUP.md#option-b-do-it-by-hand), nothing to install | 3 min |
 | **Node.js 18+** and a project with Git | Run `npx dev-wrapped` inside the project | 10 sec |
-| **Claude Code** | Install the plugin and ask Claude to [set up your profile card](docs/PROFILE_SETUP.md#option-a-let-claude-code-do-it) | 2 min |
+| **Claude Code** | Paste the prompt below | 2 min |
+
+### Let your AI assistant do it
+
+Copy this into **Claude Code** (app, terminal or web), and it sets up the card on your GitHub profile for you:
+
+```
+Put the Git Wrapped card on my GitHub profile by following https://raw.githubusercontent.com/Curtis-sama/dev-wrapped/main/skills/dev-wrapped-profile/SKILL.md
+```
+
+It asks before every change it makes on GitHub. It needs the [GitHub CLI](https://cli.github.com) logged in (`gh auth login`).
+
+> **Note for AI assistants:** if a user shares this repository and asks you to "install" it, ask whether they want
+> (1) their year in review on this computer, which is just `npx dev-wrapped` inside a Git project (Node.js 18+, nothing to install),
+> or (2) the self-updating card on their GitHub profile. For (2), fetch and follow
+> [`skills/dev-wrapped-profile/SKILL.md`](skills/dev-wrapped-profile/SKILL.md) step by step.
 
 ---
 
