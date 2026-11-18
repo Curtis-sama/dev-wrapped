@@ -1,6 +1,6 @@
 <div align="center">
 
-# git-wrapped
+# Git Wrapped
 
 [![npm](https://img.shields.io/npm/v/dev-wrapped?color=5e5ce6&label=npm)](https://www.npmjs.com/package/dev-wrapped)
 [![downloads](https://img.shields.io/npm/dm/dev-wrapped?color=bf5af2)](https://www.npmjs.com/package/dev-wrapped)
@@ -22,6 +22,18 @@ npx dev-wrapped
 Zero dependencies · Works on one repo, all your repos, or a whole GitHub account
 
 </div>
+
+---
+
+## Start here
+
+Pick the line that matches what you have. New to all this? Follow the **[beginner tutorial](docs/GETTING_STARTED.md)**.
+
+| You have… | Do this | Time |
+|---|---|---|
+| **Just a GitHub account** | [Put the card on your GitHub profile](docs/PROFILE_SETUP.md#option-b-do-it-by-hand), nothing to install | 3 min |
+| **Node.js 18+** and a project with Git | Run `npx dev-wrapped` inside the project | 10 sec |
+| **Claude Code** | Install the plugin and ask Claude to [set up your profile card](docs/PROFILE_SETUP.md#option-a-let-claude-code-do-it) | 2 min |
 
 ---
 
