@@ -89,7 +89,7 @@ export function estimateHours(commits) {
  * @param {Array} commits   commits authored by the user
  * @param {Object} opts     { year, allCommits, name, repos }
  */
-export function computeStats(commits, { year, allCommits = commits, name = 'you', repos = [] } = {}) {
+export function computeStats(commits, { year, allCommits = commits, name = 'you', repos = [], calendar: calendarOverride = null, github = null } = {}) {
   const hours = new Array(24).fill(0);
   const weekdays = new Array(7).fill(0);
   const days = new Map();
@@ -131,6 +131,12 @@ export function computeStats(commits, { year, allCommits = commits, name = 'you'
     for (const w of c.subject.toLowerCase().match(/[a-zà-ÿ']{3,}/g) || []) {
       if (!STOPWORDS.has(w)) inc(words, w);
     }
+    if (!c.files.length && (c.added || c.removed)) {
+      // remote commits (GitHub mode): no per-file detail, use totals + repo language
+      added += c.added;
+      removed += c.removed;
+      if (c.lang) inc(langs, c.lang, c.added + c.removed || 1);
+    }
     for (const f of c.files) {
       if (IGNORED_FILES.test(f.path) || IGNORED_DIRS.test(f.path)) continue;
       added += f.added;
@@ -151,7 +157,7 @@ export function computeStats(commits, { year, allCommits = commits, name = 'you'
   let runStart = null;
   for (let t = start; t < end; t += DAY) {
     const day = new Date(t).toISOString().slice(0, 10);
-    const count = days.get(day) || 0;
+    const count = (calendarOverride || days).get(day) || 0;
     calendar.push(count);
     if (count > 0) {
       if (run === 0) runStart = day;
@@ -160,6 +166,7 @@ export function computeStats(commits, { year, allCommits = commits, name = 'you'
     } else run = 0;
   }
   const busiest = topN(days, 1, 'day', 'count')[0] || null;
+  const activeDays = calendarOverride ? calendar.filter((v) => v > 0).length : days.size;
 
   const totalLang = [...langs.values()].reduce((a, b) => a + b, 0) || 1;
   const languages = topN(langs, 6).map((l) => ({ ...l, share: l.count / totalLang }));
@@ -181,9 +188,9 @@ export function computeStats(commits, { year, allCommits = commits, name = 'you'
     year,
     name,
     commits: commits.length,
-    repos: repoCount.size,
+    repos: github ? github.repos : repoCount.size,
     topRepos: topN(repoCount, 5),
-    activeDays: days.size,
+    activeDays,
     added,
     removed,
     net: added - removed,
@@ -212,6 +219,7 @@ export function computeStats(commits, { year, allCommits = commits, name = 'you'
     teammates: topN(mates, 3),
     hoursCoding: estimateHours(commits),
     book: bookComparison(added),
+    github,
   };
   stats.archetype = pickArchetype(stats);
   return stats;

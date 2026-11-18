@@ -164,7 +164,7 @@ export async function render(stats, { anim = true } = {}) {
     await pause(60);
   }
   line(`  ${DIM}${'─'.repeat(title[0].length)}${RESET}`);
-  await type(`  ${BOLD}${stats.year}${RESET} ${DIM}·${RESET} ${stats.name} ${DIM}· ${stats.repos} repo${stats.repos > 1 ? 's' : ''}${RESET}`);
+  await type(`  ${BOLD}${stats.year}${RESET} ${DIM}·${RESET} ${stats.name}${stats.github ? ` ${DIM}(@${stats.github.login})${RESET}` : ''} ${DIM}· ${stats.repos} repo${stats.repos > 1 ? 's' : ''}${RESET}`);
   await pause(500);
 
   // commits
@@ -181,6 +181,26 @@ export async function render(stats, { anim = true } = {}) {
     );
   }
   await pause(700);
+
+  // GitHub extras
+  const G = stats.github;
+  if (G) {
+    line(heading('Your year on GitHub', P));
+    await type(`  ${BOLD}${hot}${fmt(G.contributions)}${RESET} ${DIM}contributions on your profile${RESET}`);
+    await type(`  🔀 ${BOLD}${fmt(G.prs)}${RESET} pull requests   👀 ${BOLD}${fmt(G.reviews)}${RESET} reviews   🐞 ${BOLD}${fmt(G.issues)}${RESET} issues`);
+    if (G.privateContributions) await type(`  🔒 ${BOLD}${fmt(G.privateContributions)}${RESET} ${DIM}private contributions (top secret)${RESET}`);
+    if (G.topRepos.length) {
+      line();
+      const maxR = G.topRepos[0].count;
+      for (let i = 0; i < G.topRepos.length; i++) {
+        const r = G.topRepos[i];
+        const label = r.name.length > 26 ? '…' + r.name.slice(-25) : r.name;
+        line(barRow(label.padEnd(26), r.count, maxR, 18, lerp(P.slice(1), 1 - i / 5), `${DIM}${r.count} commits${r.stars ? ` · ★ ${fmt(r.stars)}` : ''}${RESET}`));
+        await pause(60);
+      }
+    }
+    await pause(700);
+  }
 
   // calendar
   line(heading('Your year at a glance', P));

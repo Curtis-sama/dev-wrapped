@@ -14,7 +14,7 @@ npx git-wrapped
 &nbsp;&nbsp;
 <img src="assets/card.png" width="400" alt="Shareable Git Wrapped card" />
 
-Zero dependencies · Runs 100% locally · Nothing leaves your machine
+Zero dependencies · Works on one repo, all your repos, or a whole GitHub account
 
 </div>
 
@@ -69,6 +69,12 @@ npx git-wrapped
 # Wrap ALL your projects at once 🤯
 npx git-wrapped --scan ~/code
 
+# Your WHOLE GitHub account, nothing to clone 🚀
+npx git-wrapped --github
+
+# Anyone's GitHub year 👀
+npx git-wrapped --github torvalds
+
 # A team recap of the current repo
 npx git-wrapped --everyone
 
@@ -80,6 +86,8 @@ npx git-wrapped --year 2025
 |---|---|
 | `-y, --year <year>` | Year to wrap (default: current year) |
 | `-s, --scan <dir>` | Scan every git repo inside a folder |
+| `-g, --github [user]` | Wrap a whole GitHub account (default: yours) |
+| `--tz <zone>` | Time zone used for hours in GitHub mode (default: yours) |
 | `-a, --author <who>` | Name or email to match (repeatable). Default: your `git config` |
 | `--everyone` | Count all authors (team recap) |
 | `--no-open` | Don't open the browser story |
@@ -87,9 +95,24 @@ npx git-wrapped --year 2025
 | `-o, --out <file>` | Where to save the HTML story |
 | `--json` | Output raw stats as JSON (build your own thing!) |
 
+## 🐙 GitHub mode
+
+`--github` reads a whole account through the GitHub API: commits on every repo (including other people's projects you contributed to), **pull requests, reviews, issues** and your exact profile contribution calendar.
+
+It needs a token, and finds one by itself if you use the [GitHub CLI](https://cli.github.com) (`gh auth login`). Otherwise:
+
+```bash
+GITHUB_TOKEN=<your token> npx git-wrapped --github
+```
+
+Create the token at [github.com/settings/tokens](https://github.com/settings/tokens). No scope is needed for public data; add `repo` to include your private repositories.
+
+> Commit details come from the default branch of the 40 repos you contributed to most.
+
 ## 🔒 Privacy
 
-git-wrapped only reads your local `git log`. No network calls, no tracking, no account.
+In local mode, git-wrapped only reads your `git log`: no network calls, no tracking, no account.
+In `--github` mode it talks only to `api.github.com`, with your own token.
 The story is a single HTML file saved on your machine.
 
 ## 🤝 Contributing

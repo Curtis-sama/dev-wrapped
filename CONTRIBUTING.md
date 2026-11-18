@@ -17,6 +17,7 @@ No dependencies to install: the project is intentionally zero-dependency.
 | File | Role |
 |---|---|
 | `src/git.js` | Reads `git log` |
+| `src/github.js` | GitHub mode (GraphQL API) |
 | `src/stats.js` | Turns commits into stats |
 | `src/archetypes.js` | Developer personalities |
 | `src/terminal.js` | Terminal rendering |

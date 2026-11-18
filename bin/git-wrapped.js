@@ -7,6 +7,7 @@ import { readCommits, findRepos, isRepoDir, repoRoot, gitConfig } from '../src/g
 import { computeStats } from '../src/stats.js';
 import { render, rawLine, style } from '../src/terminal.js';
 import { buildHtml } from '../src/html.js';
+import { resolveToken, makeRequest, fetchGitHubYear, GitHubError } from '../src/github.js';
 
 const { DIM, BOLD, RESET } = style;
 
@@ -16,9 +17,22 @@ const HELP = `
   ${BOLD}Usage${RESET}
     npx git-wrapped [options]
 
+  ${BOLD}Examples${RESET}
+    npx git-wrapped                     ${DIM}# this repo${RESET}
+    npx git-wrapped --scan ~/code       ${DIM}# every repo on your machine${RESET}
+    npx git-wrapped --github            ${DIM}# your whole GitHub account${RESET}
+    npx git-wrapped --github torvalds   ${DIM}# anyone's GitHub year 👀${RESET}
+
+  ${BOLD}GitHub mode${RESET} needs a token: it uses ${BOLD}gh auth token${RESET} if you have the GitHub CLI,
+  otherwise set ${BOLD}GITHUB_TOKEN${RESET} (create one at https://github.com/settings/tokens,
+  no scope needed for public data, "repo" to include your private repos).
+
   ${BOLD}Options${RESET}
     -y, --year <year>      Year to wrap (default: current year)
     -s, --scan <dir>       Scan every git repo inside <dir> (e.g. ~/code)
+    -g, --github [user]    Wrap a whole GitHub account, no cloning needed
+                           (default: the account of your token)
+        --tz <zone>        Time zone for --github hours (default: yours)
     -a, --author <who>     Name or email to match (repeatable). Default: your git config
         --everyone         Count every author (great for team recaps)
         --no-open          Don't open the story in the browser
@@ -29,7 +43,7 @@ const HELP = `
 `;
 
 function parseArgs(argv) {
-  const o = { year: new Date().getFullYear(), scan: null, authors: [], everyone: false, open: true, anim: true, out: null, json: false };
+  const o = { year: new Date().getFullYear(), scan: null, github: undefined, tz: Intl.DateTimeFormat().resolvedOptions().timeZone, authors: [], everyone: false, open: true, anim: true, out: null, json: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     const next = () => {
@@ -39,6 +53,8 @@ function parseArgs(argv) {
     };
     if (a === '-y' || a === '--year') o.year = Number(next());
     else if (a === '-s' || a === '--scan') o.scan = next();
+    else if (a === '-g' || a === '--github') o.github = argv[i + 1] && !argv[i + 1].startsWith('-') ? argv[++i].replace(/^@/, '') : null;
+    else if (a === '--tz') o.tz = next();
     else if (a === '-a' || a === '--author') o.authors.push(next().toLowerCase());
     else if (a === '--everyone') o.everyone = true;
     else if (a === '--no-open') o.open = false;
@@ -51,6 +67,12 @@ function parseArgs(argv) {
     } else fail(`Unknown option: ${a}`);
   }
   if (!Number.isInteger(o.year) || o.year < 1970 || o.year > 3000) fail('Invalid --year');
+  try {
+    new Intl.DateTimeFormat('en-US', { timeZone: o.tz });
+  } catch {
+    fail(`Unknown time zone: ${o.tz} (example: Europe/Paris)`);
+  }
+  if (o.github !== undefined && o.github !== null && !/^[a-z\d](?:[a-z\d-]{0,38})$/i.test(o.github)) fail(`Invalid GitHub username: ${o.github}`);
   return o;
 }
 
@@ -72,9 +94,44 @@ function openFile(file) {
   }
 }
 
+async function loadGitHub(o) {
+  const token = resolveToken();
+  if (!token) {
+    fail(
+      'GitHub mode needs a token.\n' +
+        '    • If you have the GitHub CLI: gh auth login\n' +
+        '    • Otherwise: create a token at https://github.com/settings/tokens and run\n' +
+        '      GITHUB_TOKEN=<your token> npx git-wrapped --github'
+    );
+  }
+  const request = makeRequest(token);
+  let login = o.github;
+  if (!login) login = (await request('query { viewer { login } }')).viewer.login;
+  const status = (msg) => process.stderr.isTTY && process.stderr.write(`\r\x1b[2K  ${DIM}${msg}${RESET}`);
+  status(`Fetching @${login}'s ${o.year} from GitHub…`);
+  const res = await fetchGitHubYear(login, {
+    year: o.year,
+    timeZone: o.tz,
+    request,
+    onProgress: (p) => p.phase === 'repo' && status(`Reading commits… ${p.done}/${p.total} repos (${p.repo})`),
+  });
+  if (process.stderr.isTTY) process.stderr.write('\r\x1b[2K');
+  if (!res.commits.length && !res.github.contributions) fail(`@${login} has no public activity in ${o.year}.`);
+  return computeStats(res.commits, {
+    year: o.year,
+    name: res.user.name || res.user.login,
+    calendar: res.calendar,
+    github: res.github,
+  });
+}
+
 async function main() {
   const o = parseArgs(process.argv.slice(2));
+  const stats = o.github !== undefined ? await loadGitHub(o) : loadLocal(o);
+  await output(stats, o);
+}
 
+function loadLocal(o) {
   let repos;
   if (o.scan) {
     repos = findRepos(o.scan);
@@ -104,8 +161,10 @@ async function main() {
   }
 
   const name = o.everyone ? 'Team ' + (repos.length === 1 ? repos[0].split(/[\\/]/).pop() : 'recap') : myName || mine[0].name;
-  const stats = computeStats(mine, { year: o.year, allCommits: all, name, repos });
+  return computeStats(mine, { year: o.year, allCommits: all, name, repos });
+}
 
+async function output(stats, o) {
   if (o.json) {
     process.stdout.write(JSON.stringify(stats, null, 2) + '\n');
     return;
@@ -121,4 +180,4 @@ async function main() {
   rawLine(`  ${DIM}Download your card at the end and share it with${RESET} ${BOLD}#GitWrapped${RESET}\n`);
 }
 
-main().catch((e) => fail(e.stack || e.message));
+main().catch((e) => fail(e instanceof GitHubError ? e.message : e.stack || e.message));

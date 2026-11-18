@@ -118,6 +118,15 @@ add(\`<div class="k">This year you made</div>
 <div class="h">commits</div>
 <div class="row"><span class="pill">📁 \${S.repos} repo\${S.repos > 1 ? 's' : ''}</span><span class="pill">📆 \${S.activeDays} active days</span><span class="pill">⏳ ~\${fmt(S.hoursCoding)}h of coding</span></div>\`, PALS[1]);
 
+const G = S.github;
+if (G) {
+  add(\`<div class="k">Your year on GitHub</div>
+<div class="mega" data-count="\${G.contributions}">0</div>
+<div class="h">contributions</div>
+<div class="row"><div class="stat"><b>🔀 \${fmt(G.prs)}</b><span>pull requests</span></div><div class="stat"><b>👀 \${fmt(G.reviews)}</b><span>reviews</span></div><div class="stat"><b>🐞 \${fmt(G.issues)}</b><span>issues</span></div></div>
+<div class="p">Where you spent your time: \${G.topRepos.slice(0, 3).map((r) => \`<span class="pill" style="margin:3px 3px 0 0">\${esc(r.name)} · \${r.count}</span>\`).join('')}</div>\`, PALS[7]);
+}
+
 add(\`<div class="k">Lines of code</div>
 <div class="row"><div class="stat"><b class="plus">+<span data-count="\${S.added}">0</span></b><span>added</span></div><div class="stat"><b class="minus">−<span data-count="\${S.removed}">0</span></b><span>removed</span></div></div>
 <div class="p">Printed out, that's about</div>
@@ -325,7 +334,7 @@ function renderCard() {
   blob(150, 250, 700, p1, 0.9); blob(1000, 1150, 750, p2, 0.75); blob(650, 650, 420, p3, 0.35);
   const F = 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
   x.fillStyle = '#fff'; x.textBaseline = 'top';
-  x.font = \`800 34px \${F}\`; x.globalAlpha = 0.85; x.fillText('GIT WRAPPED', 80, 80);
+  x.font = \`800 34px \${F}\`; x.globalAlpha = 0.85; x.fillText(G ? 'GIT WRAPPED · @' + G.login : 'GIT WRAPPED', 80, 80);
   x.textAlign = 'right'; x.fillText(String(S.year), W - 80, 80); x.textAlign = 'left'; x.globalAlpha = 1;
   x.font = \`900 150px \${F}\`; x.fillText(fmt(S.commits), 72, 160);
   x.font = \`800 46px \${F}\`; x.globalAlpha = 0.9; x.fillText('commits this year', 80, 320); x.globalAlpha = 1;
@@ -355,7 +364,7 @@ function renderCard() {
   });
   x.font = \`700 28px \${F}\`; x.globalAlpha = 0.8; x.fillStyle = '#fff';
   x.fillText(\`\${S.activeDays} active days · \${S.repos} repo\${S.repos > 1 ? 's' : ''} · ~\${fmt(S.hoursCoding)}h of code\`, 80, 1175);
-  x.globalAlpha = 1; x.font = \`800 30px \${F}\`; x.fillText('Get yours →  npx git-wrapped', 80, 1250);
+  x.globalAlpha = 1; x.font = \`800 30px \${F}\`; x.fillText('Get yours →  npx git-wrapped' + (G ? ' --github' : ''), 80, 1250);
   return c;
 }
 function wrap(x, text, tx, ty, maxW, lh) {
