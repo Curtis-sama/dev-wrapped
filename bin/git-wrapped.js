@@ -15,13 +15,13 @@ const HELP = `
   ${BOLD}git-wrapped${RESET} — Spotify Wrapped, but for your Git history
 
   ${BOLD}Usage${RESET}
-    npx git-wrapped [options]
+    npx dev-wrapped [options]
 
   ${BOLD}Examples${RESET}
-    npx git-wrapped                     ${DIM}# this repo${RESET}
-    npx git-wrapped --scan ~/code       ${DIM}# every repo on your machine${RESET}
-    npx git-wrapped --github            ${DIM}# your whole GitHub account${RESET}
-    npx git-wrapped --github torvalds   ${DIM}# anyone's GitHub year${RESET}
+    npx dev-wrapped                     ${DIM}# this repo${RESET}
+    npx dev-wrapped --scan ~/code       ${DIM}# every repo on your machine${RESET}
+    npx dev-wrapped --github            ${DIM}# your whole GitHub account${RESET}
+    npx dev-wrapped --github torvalds   ${DIM}# anyone's GitHub year${RESET}
 
   ${BOLD}GitHub mode${RESET} needs a token: it uses ${BOLD}gh auth token${RESET} if you have the GitHub CLI,
   otherwise set ${BOLD}GITHUB_TOKEN${RESET} (create one at https://github.com/settings/tokens,
@@ -101,7 +101,7 @@ async function loadGitHub(o) {
       'GitHub mode needs a token.\n' +
         '    • If you have the GitHub CLI: gh auth login\n' +
         '    • Otherwise: create a token at https://github.com/settings/tokens and run\n' +
-        '      GITHUB_TOKEN=<your token> npx git-wrapped --github'
+        '      GITHUB_TOKEN=<your token> npx dev-wrapped --github'
     );
   }
   const request = makeRequest(token);

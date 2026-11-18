@@ -1,5 +1,5 @@
 {
-  "name": "git-wrapped",
+  "name": "dev-wrapped",
   "version": "1.0.0",
   "description": "🎁 Spotify Wrapped, but for your Git history. Stunning terminal recap + a shareable story in your browser. Zero dependencies.",
   "author": "Curtis-sama",
@@ -13,6 +13,7 @@
   },
   "type": "module",
   "bin": {
+    "dev-wrapped": "bin/git-wrapped.js",
     "git-wrapped": "bin/git-wrapped.js"
   },
   "files": [

@@ -7,7 +7,7 @@
 **One command. Your whole coding year, turned into a stunning terminal recap<br>and an animated story you can share.**
 
 ```bash
-npx git-wrapped
+npx dev-wrapped
 ```
 
 <img src="assets/story.gif" width="288" alt="Animated Git Wrapped story" />
@@ -64,22 +64,22 @@ Which one are you? Run it and find out.
 
 ```bash
 # Wrap the current repository (your commits only)
-npx git-wrapped
+npx dev-wrapped
 
 # Wrap ALL your projects at once
-npx git-wrapped --scan ~/code
+npx dev-wrapped --scan ~/code
 
 # Your WHOLE GitHub account, nothing to clone
-npx git-wrapped --github
+npx dev-wrapped --github
 
 # Anyone's GitHub year
-npx git-wrapped --github torvalds
+npx dev-wrapped --github torvalds
 
 # A team recap of the current repo
-npx git-wrapped --everyone
+npx dev-wrapped --everyone
 
 # Another year
-npx git-wrapped --year 2025
+npx dev-wrapped --year 2025
 ```
 
 | Option | Description |
@@ -102,7 +102,7 @@ npx git-wrapped --year 2025
 It needs a token, and finds one by itself if you use the [GitHub CLI](https://cli.github.com) (`gh auth login`). Otherwise:
 
 ```bash
-GITHUB_TOKEN=<your token> npx git-wrapped --github
+GITHUB_TOKEN=<your token> npx dev-wrapped --github
 ```
 
 Create the token at [github.com/settings/tokens](https://github.com/settings/tokens). No scope is needed for public data; add `repo` to include your private repositories.

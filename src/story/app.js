@@ -409,7 +409,7 @@ function renderCard() {
   });
   x.globalAlpha = 1;
   mono(x, `${S.activeDays} active days · ${S.repos} repo${S.repos > 1 ? 's' : ''} · ~${fmt(S.hoursCoding)}h`, 80, 1235, 19, 0.5);
-  mono(x, `npx git-wrapped${G ? ' --github' : ''}`, 80, 1282, 22, 0.85);
+  mono(x, `npx dev-wrapped${G ? ' --github' : ''}`, 80, 1282, 22, 0.85);
   return c;
 }
 function wrap(x, text, tx, ty, maxW, lh) {
@@ -437,7 +437,7 @@ async function showCard(el) {
   }
   $('#card', el).src = cardUrl;
   $('#dl', el).onclick = () => Object.assign(document.createElement('a'), { href: cardUrl, download: `git-wrapped-${S.year}.png` }).click();
-  const txt = `My ${S.year} Git Wrapped: ${fmt(S.commits)} commits, a ${S.longestStreak.length}-day streak, and apparently I'm ${A.name}.\n\nGet yours: npx git-wrapped`;
+  const txt = `My ${S.year} Git Wrapped: ${fmt(S.commits)} commits, a ${S.longestStreak.length}-day streak, and apparently I'm ${A.name}.\n\nGet yours: npx dev-wrapped`;
   $('#tw', el).href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(txt);
   $('#again', el).onclick = () => go(0);
   confetti(90);
