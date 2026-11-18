@@ -64,6 +64,8 @@ on:
   schedule:
     - cron: '0 6 * * *'   # every day at 06:00 UTC
   workflow_dispatch:       # lets you run it by hand
+  push:                    # runs once as soon as you add this file
+    paths: ['.github/workflows/dev-wrapped.yml']
 permissions:
   contents: write
 jobs:
@@ -82,7 +84,7 @@ jobs:
 ![My Git Wrapped](./dev-wrapped.svg)
 ```
 
-**3.** Run the workflow once from the **Actions** tab, and you're done.
+**3.** That's it: adding the workflow starts the first run. Your card shows up after about a minute.
 
 > Put the image line **above** any `<!--` in your README: GitHub's default profile README hides its content inside an HTML comment.
 

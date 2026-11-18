@@ -74,6 +74,8 @@ on:
   schedule:
     - cron: '0 6 * * *'   # every day at 06:00 UTC
   workflow_dispatch:       # lets you run it by hand
+  push:                    # runs once as soon as you add this file
+    paths: ['.github/workflows/dev-wrapped.yml']
 permissions:
   contents: write
 jobs:
@@ -101,9 +103,11 @@ Open `README.md`, click the pencil icon, and add:
 
 Commit. The image looks broken for now: the card doesn't exist yet.
 
-### 4. Generate the card
+### 4. Wait a minute
 
-Go to **Actions → Git Wrapped → Run workflow → Run workflow**. After about a minute you get a green check, and the card appears on `github.com/<your-username>`.
+Adding the workflow file in step 2 already started the first run. Open the **Actions** tab: after about a minute you get a green check, and the card appears on `github.com/<your-username>`.
+
+Nothing in the Actions tab? Click **Git Wrapped → Run workflow → Run workflow** to start it by hand.
 
 ---
 
@@ -139,7 +143,7 @@ Run the workflow again.
 
 | Problem | Fix |
 |---|---|
-| The image stays broken | Run the workflow once (step 4), and check the README points to `./dev-wrapped.svg`. |
+| The image stays broken | Check the run in the **Actions** tab (step 4), and that the README points to `./dev-wrapped.svg`. |
 | The card doesn't show on my profile | The line is probably inside `<!-- -->`. Move it above. |
 | The run fails on `git push` (403) | **Settings → Actions → General → Workflow permissions**: choose *Read and write permissions*. |
 | Very few commits | Only public activity is counted: see *Include private contributions*. |

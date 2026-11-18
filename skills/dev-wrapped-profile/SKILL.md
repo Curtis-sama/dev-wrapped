@@ -70,6 +70,8 @@ on:
   schedule:
     - cron: '0 6 * * *'
   workflow_dispatch:
+  push:
+    paths: ['.github/workflows/dev-wrapped.yml']
 permissions:
   contents: write
 jobs:
@@ -117,12 +119,21 @@ git push
 
 ## 6. Generate the card
 
+Pushing the workflow file starts the first run by itself (`push` trigger). Wait a few seconds, then
+find it:
+
+```bash
+gh run list -R <login>/<login> --workflow dev-wrapped.yml --limit 1
+```
+
+If no run shows up after ~30 seconds (for example the workflow file already existed and did not
+change), start one by hand:
+
 ```bash
 gh workflow run dev-wrapped.yml -R <login>/<login>
 ```
 
-If it answers that the workflow is not found, wait a few seconds and retry: GitHub needs a moment to
-register a freshly pushed workflow. Then follow the run:
+Then follow the run:
 
 ```bash
 gh run list -R <login>/<login> --workflow dev-wrapped.yml --limit 1
@@ -139,7 +150,8 @@ gh api repos/<login>/<login>/contents/dev-wrapped.svg -q .name
 
 Tell the user it is done and give them `https://github.com/<login>`. Mention that:
 
-- the card refreshes every day at 06:00 UTC, and they can run it by hand from the **Actions** tab;
+- the card refreshes every day at 06:00 UTC, and they can run it by hand from the **Actions** tab
+  (**Git Wrapped → Run workflow**);
 - it follows each visitor's light or dark theme.
 
 ## Optional: include private contributions
