@@ -46,3 +46,10 @@ test('html escapes commit messages', () => {
   const html = buildHtml(s);
   assert.ok(!html.includes('</script><img'));
 });
+
+test('coding hours use absolute time across time zones', () => {
+  // 23:00 in Paris, then 18:00 in New York one real hour later (01:00 Paris time)
+  const paris = c('2026-04-10', 23, 'a', { ts: Date.parse('2026-04-10T23:00:00+02:00') });
+  const ny = c('2026-04-10', 18, 'b', { ts: Date.parse('2026-04-10T18:00:00-04:00') });
+  assert.equal(estimateHours([paris, ny]), 2); // one 1h30 session, not two separate ones
+});

@@ -82,8 +82,18 @@ query($owner: String!, $name: String!, $author: ID!, $since: GitTimestamp!, $unt
   }
 }`;
 
-/** Convert an ISO timestamp to the wall-clock time of a given time zone. */
+/**
+ * Wall-clock time of a commit. Git timestamps that carry their own UTC offset
+ * (e.g. 2026-03-01T23:30:00+09:00) are read as-is: that's the author's local time.
+ * Timestamps in UTC ("Z") are converted to the fallback time zone.
+ */
 export function localParts(iso, timeZone) {
+  const own = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::\d{2}(?:\.\d+)?)?[+-]\d{2}:?\d{2}$/.exec(iso);
+  if (own) {
+    const [, y, mo, d, h, mi] = own;
+    const dow = new Date(Date.UTC(+y, +mo - 1, +d)).getUTCDay();
+    return { day: `${y}-${mo}-${d}`, hour: +h, minute: +mi, weekday: dow === 0 ? 7 : dow };
+  }
   const parts = Object.fromEntries(
     new Intl.DateTimeFormat('en-US', {
       timeZone,
@@ -155,6 +165,7 @@ export async function fetchGitHubYear(login, { year, timeZone, request, onProgre
           name: user.name || user.login,
           email: user.login.toLowerCase(),
           ...localParts(n.authoredDate, timeZone),
+          ts: Date.parse(n.authoredDate),
           subject: n.messageHeadline || '',
           added: n.additions || 0,
           removed: n.deletions || 0,

@@ -72,7 +72,8 @@ export function bookComparison(linesAdded) {
 /** Estimate time spent coding: commits closer than 2h belong to the same session. */
 export function estimateHours(commits) {
   const times = commits
-    .map((c) => dayToUTC(c.day) + (c.hour * 60 + c.minute) * 60000)
+    // absolute time when known, so travel and DST changes don't distort session gaps
+    .map((c) => (Number.isFinite(c.ts) ? c.ts : dayToUTC(c.day) + (c.hour * 60 + c.minute) * 60000))
     .sort((a, b) => a - b);
   if (!times.length) return 0;
   const MAX_GAP = 2 * 3600000;

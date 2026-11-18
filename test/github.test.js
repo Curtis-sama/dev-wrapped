@@ -73,3 +73,9 @@ test('request maps 401 to a friendly error', async () => {
   const req = makeRequest('t', async () => ({ status: 401, ok: false, json: async () => ({}) }));
   await assert.rejects(req('q', {}), /rejected the token/);
 });
+
+test('localParts keeps the offset a commit carries', () => {
+  // 01:15 in Tokyo stays 01:15, whatever the fallback zone
+  assert.deepEqual(localParts('2026-03-05T01:15:00+09:00', 'Europe/Paris'), { day: '2026-03-05', hour: 1, minute: 15, weekday: 4 });
+  assert.deepEqual(localParts('2026-03-08T23:59:00-05:00', 'UTC'), { day: '2026-03-08', hour: 23, minute: 59, weekday: 7 });
+});

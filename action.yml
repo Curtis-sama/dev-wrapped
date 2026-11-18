@@ -27,7 +27,7 @@ inputs:
     required: false
     default: ''
   timezone:
-    description: 'IANA time zone used for commit hours, e.g. Europe/Paris.'
+    description: 'Fallback IANA time zone for commits GitHub reports in UTC, e.g. Europe/Paris. Commits that carry their own offset keep their local time.'
     required: false
     default: 'UTC'
   commit:

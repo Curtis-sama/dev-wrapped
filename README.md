@@ -208,6 +208,10 @@ Create the token at [github.com/settings/tokens](https://github.com/settings/tok
 
 > Commit details come from the default branch of the 40 repos you contributed to most.
 
+### Time zones
+
+Hours are each commit's **own local time**: a commit at 1am in Tokyo counts as 1am, even if you were in Paris the week before. Coding-hour sessions are measured on absolute time, so travel and daylight-saving changes don't distort them. One limit: commits made on machines set to UTC (CI, dev containers) are recorded in UTC by Git itself.
+
 ## Privacy
 
 In local mode, git-wrapped only reads your `git log`: no network calls, no tracking, no account.

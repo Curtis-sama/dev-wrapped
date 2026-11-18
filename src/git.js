@@ -70,7 +70,7 @@ export function readCommits(repoDir, { since, until }) {
     `--since=${since}`,
     `--until=${until}`,
     '--date=format:%Y-%m-%d %H %M %u',
-    `--pretty=format:${REC}%H${SEP}%an${SEP}%ae${SEP}%ad${SEP}%s`,
+    `--pretty=format:${REC}%H${SEP}%an${SEP}%ae${SEP}%ad${SEP}%at${SEP}%s`,
     '--numstat',
   ];
   const out = git(args, repoDir);
@@ -81,7 +81,7 @@ export function readCommits(repoDir, { since, until }) {
   for (const chunk of out.split(REC)) {
     if (!chunk.trim()) continue;
     const [header, ...rest] = chunk.split('\n');
-    const [hash, name, email, date, subject = ''] = header.split(SEP);
+    const [hash, name, email, date, at, subject = ''] = header.split(SEP);
     if (!hash || seen.has(hash)) continue;
     seen.add(hash);
     const [day, hour, minute, weekday] = (date || '').split(' ');
@@ -106,6 +106,7 @@ export function readCommits(repoDir, { since, until }) {
       hour: Number(hour),
       minute: Number(minute),
       weekday: Number(weekday), // 1 = Monday … 7 = Sunday
+      ts: Number(at) * 1000, // absolute time, for session gaps
       subject,
       added,
       removed,
